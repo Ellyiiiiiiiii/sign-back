@@ -18,7 +18,9 @@ app.get("/", (req, res) => {
 
 app.get("/json-sales", (req, res) => {
   // 輸出 application/json 的格式
-  res.json(salesArray);
+  // res.json(salesArray);
+
+  res.render("json-sales", { sales: salesArray });
 });
 
 // ************* 設定靜態內容資料夾 *************
