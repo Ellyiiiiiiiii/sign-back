@@ -5,7 +5,7 @@ const server = http.createServer((req, res) => {
     "Content-Type": "text/html; charset=utf-8",
   });
   res.end(`
-  <h2>Hello 泥好</h2>
+  <h2>Hello 您好</h2>
   <p>${req.url}</p>
   `);
 });
