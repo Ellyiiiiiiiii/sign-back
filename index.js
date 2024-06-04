@@ -2,7 +2,7 @@
 // console.log(process.env.DB_PASS);
 
 import express from "express";
-import salesArray from "./data/sales.js";
+import sales from "./data/sales.js";
 
 const app = express();
 
@@ -20,7 +20,7 @@ app.get("/json-sales", (req, res) => {
   // 輸出 application/json 的格式
   // res.json(salesArray);
 
-  res.render("json-sales", { sales: salesArray });
+  res.render("json-sales", { sales });
 });
 
 // ************* 設定靜態內容資料夾 *************
