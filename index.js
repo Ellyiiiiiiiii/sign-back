@@ -16,6 +16,11 @@ app.get("/", (req, res) => {
   res.render("home", { name: "Shinder" });
 });
 
+app.get("/json-sales", (req, res) => {
+  // 輸出 application/json 的格式
+  res.json(salesArray);
+});
+
 // ************* 設定靜態內容資料夾 *************
 app.use(express.static("public"));
 app.use("/bootstrap", express.static("node_modules/bootstrap/dist"));
