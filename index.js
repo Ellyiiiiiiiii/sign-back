@@ -11,11 +11,7 @@ const app = express();
 app.get("/", (req, res) => {
   res.send("<h2>Hello World</h2>");
 });
-/*
-app.get("/a.html", (req, res) => {
-  res.send("<h2>假的 a.html</h2>");
-});
-*/
+
 // ************* 設定靜態內容資料夾 *************
 app.use(express.static("public"));
 app.use("/bootstrap", express.static("node_modules/bootstrap/dist"));
