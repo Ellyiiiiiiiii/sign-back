@@ -12,6 +12,7 @@ app.get("/", (req, res) => {
   res.send("<h2>Hello World</h2>");
 });
 
-app.listen(3000, () => {
-  console.log(`伺服器啟動了`);
+const port = process.env.WEB_PORT || 3002;
+app.listen(port, () => {
+  console.log(`伺服器啟動了, port: ${port}`);
 });
