@@ -28,6 +28,13 @@ app.get("/try-qs", (req, res) => {
   res.json(req.query);
 });
 
+app.get("/try-post-form", (req, res) => {
+  res.render("try-post-form");
+});
+app.post("/try-post-form", (req, res) => {
+  res.json({ name: "david" });
+});
+
 // ************* 設定靜態內容資料夾 *************
 app.use(express.static("public"));
 app.use("/bootstrap", express.static("node_modules/bootstrap/dist"));
