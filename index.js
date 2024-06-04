@@ -23,6 +23,11 @@ app.get("/json-sales", (req, res) => {
   res.render("json-sales", { sales });
 });
 
+// 測試 query string 參數
+app.get("/try-qs", (req, res) => {
+  res.json(req.query);
+});
+
 // ************* 設定靜態內容資料夾 *************
 app.use(express.static("public"));
 app.use("/bootstrap", express.static("node_modules/bootstrap/dist"));
