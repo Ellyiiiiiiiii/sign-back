@@ -29,7 +29,9 @@
         const r = await myPromise(i);
         console.log(r);
       }
-    })();
+    })().then(()=>{
+      console.log('都執行結束了');
+    })
 
 
 
