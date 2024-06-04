@@ -12,6 +12,8 @@ app.get("/", (req, res) => {
   res.send("<h2>Hello World</h2>");
 });
 
+// ************* 設定靜態內容資料夾 *************
+app.use(express.static("public"));
 // ************* 放在所有路由的後面 *************
 // 404 頁面
 app.use((req, res) => {
