@@ -12,6 +12,12 @@ app.get("/", (req, res) => {
   res.send("<h2>Hello World</h2>");
 });
 
+// ************* 放在所有路由的後面 *************
+// 404 頁面
+app.use((req, res) => {
+  res.status(404).send("<h1>您走錯路了</h1>");
+});
+
 const port = process.env.WEB_PORT || 3002;
 app.listen(port, () => {
   console.log(`伺服器啟動了, port: ${port}`);
