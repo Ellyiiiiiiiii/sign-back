@@ -2,6 +2,7 @@
 // console.log(process.env.DB_PASS);
 
 import express from "express";
+import salesArray from "./data/sales.js";
 
 const app = express();
 
