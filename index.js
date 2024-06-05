@@ -10,6 +10,7 @@ app.set("view engine", "ejs");
 
 // Top-level middlewares
 app.use(express.urlencoded({extended: true}));
+app.use(express.json());
 
 // 路由設定, routes
 // 1. get(): 只接受 HTTP GET 方法的拜訪
