@@ -8,6 +8,9 @@ const app = express();
 
 app.set("view engine", "ejs");
 
+// Top-level middlewares
+app.use(express.urlencoded({extended: true}));
+
 // 路由設定, routes
 // 1. get(): 只接受 HTTP GET 方法的拜訪
 // 2. 只接受 路徑為 / 的 request
@@ -33,9 +36,13 @@ app.get("/try-post-form", (req, res) => {
 });
 
 // middleware: 中介軟體, 中介處理函式
-const urlencodedParser = express.urlencoded({extended: true});
-app.post("/try-post-form", [urlencodedParser],  (req, res) => {
+// const urlencodedParser = express.urlencoded({extended: true});
+app.post("/try-post-form", (req, res) => {
   // 經過 parser 後, 才會有 req.body
+  res.json(req.body);
+});
+
+app.post("/try-post", (req, res) => {
   res.json(req.body);
 });
 
