@@ -49,8 +49,16 @@ app.post("/try-post", (req, res) => {
   res.json(req.body);
 });
 
+// 測試上傳單一個欄位單一個檔案
 app.post("/try-upload", upload.single("avatar"), (req, res) => {
-  res.json(req.file);
+  res.json({
+    file: req.file,
+    body: req.body,
+  });
+});
+// 測試上傳單一個欄位多個檔案
+app.post("/try-uploads", upload.array("photos",10), (req, res) => {
+  res.json(req.files);
 });
 
 // ************* 設定靜態內容資料夾 *************
