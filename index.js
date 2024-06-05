@@ -9,7 +9,7 @@ const app = express();
 app.set("view engine", "ejs");
 
 // Top-level middlewares
-app.use(express.urlencoded({extended: true}));
+app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
 // 路由設定, routes
@@ -33,14 +33,14 @@ app.get("/try-qs", (req, res) => {
 });
 
 app.get("/try-post-form", (req, res) => {
+  // res.render("try-post-form", { account: "", password: "" });
   res.render("try-post-form");
 });
 
 // middleware: 中介軟體, 中介處理函式
 // const urlencodedParser = express.urlencoded({extended: true});
 app.post("/try-post-form", (req, res) => {
-  // 經過 parser 後, 才會有 req.body
-  res.json(req.body);
+  res.render("try-post-form", req.body);
 });
 
 app.post("/try-post", (req, res) => {
