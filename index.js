@@ -2,8 +2,10 @@
 // console.log(process.env.DB_PASS);
 
 import express from "express";
+import multer from "multer";
 import sales from "./data/sales.js";
 
+const upload = multer({ dest: "tmp_uploads/" });
 const app = express();
 
 app.set("view engine", "ejs");
@@ -45,6 +47,10 @@ app.post("/try-post-form", (req, res) => {
 
 app.post("/try-post", (req, res) => {
   res.json(req.body);
+});
+
+app.post("/try-upload", upload.single("avatar"), (req, res) => {
+  res.json(req.file);
 });
 
 // ************* 設定靜態內容資料夾 *************
