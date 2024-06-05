@@ -31,8 +31,12 @@ app.get("/try-qs", (req, res) => {
 app.get("/try-post-form", (req, res) => {
   res.render("try-post-form");
 });
-app.post("/try-post-form", (req, res) => {
-  res.json({ name: "david" });
+
+// middleware: 中介軟體, 中介處理函式
+const urlencodedParser = express.urlencoded({extended: true});
+app.post("/try-post-form", urlencodedParser,  (req, res) => {
+  // 經過 parser 後, 才會有 req.body
+  res.json(req.body);
 });
 
 // ************* 設定靜態內容資料夾 *************
