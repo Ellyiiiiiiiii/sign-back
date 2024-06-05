@@ -34,7 +34,7 @@ app.get("/try-post-form", (req, res) => {
 
 // middleware: 中介軟體, 中介處理函式
 const urlencodedParser = express.urlencoded({extended: true});
-app.post("/try-post-form", urlencodedParser,  (req, res) => {
+app.post("/try-post-form", [urlencodedParser],  (req, res) => {
   // 經過 parser 後, 才會有 req.body
   res.json(req.body);
 });
