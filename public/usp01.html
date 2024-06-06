@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="zh-hant-TW">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="info"></div>
+
+  <script>
+    const obj = {
+      name: "David",
+      gender: "男生",
+      age: 20
+    }
+
+    // 把 Object 類型物件轉換成 urlencoded 格式 
+    const usp = new URLSearchParams(obj);
+
+    info.innerText = usp.toString();
+  </script>
+
+</body>
+
+</html>
