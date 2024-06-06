@@ -11,7 +11,7 @@ import admin2Router from "./routes/admin2.js";
 import session from "express-session";
 import moment from "moment-timezone";
 
-import "./utils/connect-mysql.js";
+import db from "./utils/connect-mysql.js";
 
 const app = express();
 
@@ -106,10 +106,10 @@ app.get("/try-sess", (req, res) => {
 });
 
 app.get("/try-moment", (req, res) => {
-  const fm = "YYYY-MM-DD HH:mm:ss"
+  const fm = "YYYY-MM-DD HH:mm:ss";
   const m1 = moment(); // 取得當下時間的 moment 物件
-  const m2 = moment('2024-02-29');
-  const m3 = moment('2023-02-29');
+  const m2 = moment("2024-02-29");
+  const m3 = moment("2023-02-29");
 
   res.json({
     m1: m1.format(fm),
@@ -120,7 +120,13 @@ app.get("/try-moment", (req, res) => {
     m3v: m3.isValid(),
     m1z: m1.tz("Europe/London").format(fm),
     m2z: m2.tz("Europe/London").format(fm),
-  })
+  });
+});
+
+app.get("/try-db", async (req, res) => {
+  const sql = "SELECT * FROM address_book LIMIT 3";
+  const [rows, fields] = await db.query(sql);
+  res.json(rows);
 });
 
 // ************* 設定靜態內容資料夾 *************
