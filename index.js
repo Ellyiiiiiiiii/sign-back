@@ -21,6 +21,7 @@ app.use(
   session({
     saveUninitialized: false,
     resave: false,
+    // name: 'super.mario', // cookie (session id) 的名稱
     secret: "dgdjk398475UGJKGlkskjhfskjf",
     // cookie: {
     //  maxAge: 1200_000
