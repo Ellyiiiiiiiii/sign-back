@@ -8,8 +8,7 @@ import sales from "./data/sales.js";
 // const upload = multer({ dest: "tmp_uploads/" });
 import upload from "./utils/upload-imgs.js";
 import admin2Router from "./routes/admin2.js";
-
-
+import session from "express-session";
 
 const app = express();
 
@@ -18,6 +17,13 @@ app.set("view engine", "ejs");
 // Top-level middlewares
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(
+  session({
+    saveUninitialized: false,
+    resave: false,
+    secret: "dgdjk398475UGJKGlkskjhfskjf",
+  })
+);
 
 // 路由設定, routes
 // 1. get(): 只接受 HTTP GET 方法的拜訪
@@ -84,6 +90,13 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res) => {
 });
 
 app.use("/admins", admin2Router);
+
+app.get("/try-sess", (req, res) => {
+  // req.session.my_num = req.session.my_num || 0;
+  req.session.my_num ||= 0;
+  req.session.my_num++;
+  res.json(req.session);
+});
 
 // ************* 設定靜態內容資料夾 *************
 app.use(express.static("public"));
