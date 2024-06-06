@@ -62,6 +62,18 @@ app.post("/try-uploads", upload.array("photos", 10), (req, res) => {
   res.json(req.files);
 });
 
+
+// 特定的路徑放前面
+app.get("/my-params1/abcd", (req, res) => {
+  res.json({ path: "/my-params1/abcd" });
+});
+// 路徑參數
+app.get("/my-params1/:action?/:id?", (req, res) => {
+  res.json(req.params);
+});
+
+
+
 // ************* 設定靜態內容資料夾 *************
 app.use(express.static("public"));
 app.use("/bootstrap", express.static("node_modules/bootstrap/dist"));
