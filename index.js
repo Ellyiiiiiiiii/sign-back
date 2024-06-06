@@ -7,6 +7,10 @@ import sales from "./data/sales.js";
 
 // const upload = multer({ dest: "tmp_uploads/" });
 import upload from "./utils/upload-imgs.js";
+import admin2Router from "./routes/admin2.js";
+
+
+
 const app = express();
 
 app.set("view engine", "ejs");
@@ -78,6 +82,8 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res) => {
 
   res.json({ 手機: u });
 });
+
+app.use(admin2Router);
 
 // ************* 設定靜態內容資料夾 *************
 app.use(express.static("public"));
