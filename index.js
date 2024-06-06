@@ -125,7 +125,8 @@ app.get("/try-moment", (req, res) => {
 
 app.get("/try-db", async (req, res) => {
   const sql = "SELECT * FROM address_book LIMIT 3";
-  const [rows, fields] = await db.query(sql);
+  //const [rows, fields] = await db.query(sql);
+  const [rows] = await db.query(sql);
   res.json(rows);
 });
 
