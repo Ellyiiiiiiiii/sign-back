@@ -5,7 +5,8 @@ import express from "express";
 import multer from "multer";
 import sales from "./data/sales.js";
 
-const upload = multer({ dest: "tmp_uploads/" });
+// const upload = multer({ dest: "tmp_uploads/" });
+import upload from "./utils/upload-imgs.js";
 const app = express();
 
 app.set("view engine", "ejs");
@@ -57,7 +58,7 @@ app.post("/try-upload", upload.single("avatar"), (req, res) => {
   });
 });
 // 測試上傳單一個欄位多個檔案
-app.post("/try-uploads", upload.array("photos",10), (req, res) => {
+app.post("/try-uploads", upload.array("photos", 10), (req, res) => {
   res.json(req.files);
 });
 
