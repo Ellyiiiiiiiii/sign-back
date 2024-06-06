@@ -83,7 +83,7 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res) => {
   res.json({ 手機: u });
 });
 
-app.use(admin2Router);
+app.use("/admins", admin2Router);
 
 // ************* 設定靜態內容資料夾 *************
 app.use(express.static("public"));
