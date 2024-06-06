@@ -11,6 +11,8 @@ import admin2Router from "./routes/admin2.js";
 import session from "express-session";
 import moment from "moment-timezone";
 
+import "./utils/connect-mysql.js";
+
 const app = express();
 
 app.set("view engine", "ejs");
