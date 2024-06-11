@@ -1,3 +1,11 @@
+<style>
+  .navbar-nav .nav-link.active {
+    background-color: blue;
+    border-radius: 6px;
+    color: white;
+    font-weight: 900;
+  }
+</style>
 <div class="container">
   <nav class="navbar navbar-expand-lg bg-body-tertiary">
     <div class="container-fluid">
@@ -9,10 +17,10 @@
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link" href="/json-sales">json-sales</a>
+            <a class="nav-link <%= pageName==='json-sales' ? 'active' : '' %>" href="/json-sales">json-sales</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="/try-post-form">try-post-form</a>
+            <a class="nav-link <%= pageName==='tpf' ? 'active' : '' %>" href="/try-post-form">try-post-form</a>
           </li>
         </ul>
 
