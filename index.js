@@ -36,6 +36,14 @@ app.use(
   })
 );
 
+// ******************* 自訂 top-level middleware
+app.use((req, res, next) => {
+  // res.send("<p>直接被中斷</p>"); // 不應該回應
+  res.locals.title = '小新的網站'; // 預設的頁面 title
+
+  next();
+});
+
 // 路由設定, routes
 // 1. get(): 只接受 HTTP GET 方法的拜訪
 // 2. 只接受 路徑為 / 的 request
@@ -45,6 +53,7 @@ app.get("/", (req, res) => {
 });
 
 app.get("/json-sales", (req, res) => {
+  res.locals.title = 'JSON-SALES | ' + res.locals.title;
   // 輸出 application/json 的格式
   // res.json(salesArray);
 
@@ -57,6 +66,7 @@ app.get("/try-qs", (req, res) => {
 });
 
 app.get("/try-post-form", (req, res) => {
+  res.locals.title = '測試表單 | ' + res.locals.title;
   // res.render("try-post-form", { account: "", password: "" });
   res.render("try-post-form");
 });
