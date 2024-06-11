@@ -3,7 +3,7 @@ import express from "express";
 const router = express.Router();
 
 router.get("/", (req, res) => {
-  res.send("<h1>ab test</h1>");
+  res.render("address-book/list");
 });
 
 export default router;
