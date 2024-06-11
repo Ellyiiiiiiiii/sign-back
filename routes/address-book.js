@@ -8,6 +8,9 @@ router.get("/", async (req, res) => {
 
   const perPage = 20; // 每頁最多有幾筆
   let page = +req.query.page || 1;
+  if (page < 1) {
+    return res.redirect(`?page=1`); // 轉向
+  }
 
   const sql = "SELECT COUNT(*) totalRows FROM address_book";
   const [[{ totalRows }]] = await db.query(sql); // 取得總筆數
@@ -16,8 +19,11 @@ router.get("/", async (req, res) => {
   let rows = []; // 分頁資料
   if (totalRows > 0) {
     totalPages = Math.ceil(totalRows / perPage);
+    if (page > totalPages) {
+      return res.redirect(`?page=${totalPages}`); // 轉向
+    }
 
-    const sql2 = `SELECT * FROM address_book LIMIT ${
+    const sql2 = `SELECT * FROM address_book ORDER BY sid DESC LIMIT ${
       (page - 1) * perPage
     }, ${perPage} `;
     [rows] = await db.query(sql2);
