@@ -9,11 +9,14 @@ import sales from "./data/sales.js";
 import upload from "./utils/upload-imgs.js";
 import admin2Router from "./routes/admin2.js";
 import session from "express-session";
+import mysql_session from "express-mysql-session";
 import moment from "moment-timezone";
 
 import db from "./utils/connect-mysql.js";
 
 const app = express();
+const MysqlStore = mysql_session(session);
+const sessionStore = new MysqlStore({}, db);
 
 app.set("view engine", "ejs");
 
@@ -26,6 +29,7 @@ app.use(
     resave: false,
     // name: 'super.mario', // cookie (session id) 的名稱
     secret: "dgdjk398475UGJKGlkskjhfskjf",
+    store: sessionStore,
     // cookie: {
     //  maxAge: 1200_000
     // }
