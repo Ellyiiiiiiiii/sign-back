@@ -8,6 +8,7 @@ import sales from "./data/sales.js";
 // const upload = multer({ dest: "tmp_uploads/" });
 import upload from "./utils/upload-imgs.js";
 import admin2Router from "./routes/admin2.js";
+import abRouter from "./routes/address-book.js";
 import session from "express-session";
 import mysql_session from "express-mysql-session";
 import moment from "moment-timezone";
@@ -114,6 +115,7 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res) => {
 });
 
 app.use("/admins", admin2Router);
+app.use("/address-book", abRouter);
 
 app.get("/try-sess", (req, res) => {
   // req.session.my_num = req.session.my_num || 0;
