@@ -29,9 +29,9 @@ router.get("/", async (req, res) => {
     [rows] = await db.query(sql2);
   }
 
-  res.json({ totalRows, totalPages, page, perPage, rows });
+  // res.json({ totalRows, totalPages, page, perPage, rows });
 
-  // res.render("address-book/list");
+  res.render("address-book/list", { totalRows, totalPages, page, perPage, rows });
 });
 
 export default router;
