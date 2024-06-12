@@ -1,6 +1,7 @@
 import express from "express";
 import moment from "moment-timezone";
 import db from "./../utils/connect-mysql.js";
+import upload from "./../utils/upload-imgs.js";
 
 const dateFormat = "YYYY-MM-DD";
 const router = express.Router();
@@ -101,7 +102,7 @@ router.get("/add", async (req, res) => {
   res.render("address-book/add");
 });
 
-router.post("/add", async (req, res) => {
+router.post("/add", upload.none(), async (req, res) => {
   // 處理表單資料
   res.json(req.body);
 });
