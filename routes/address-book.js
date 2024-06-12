@@ -10,6 +10,9 @@ router.get("/", async (req, res) => {
 
   let keyword = req.query.keyword || ""; // 預設值為空字串
 
+  let birthBegin = req.query.birthBegin || ""; // 這個日期之後出生的
+  let birthEnd = req.query.birthEnd || "";     // 這個日期之前出生的
+
   const perPage = 20; // 每頁最多有幾筆
   let page = +req.query.page || 1;
   if (page < 1) {
@@ -21,6 +24,16 @@ router.get("/", async (req, res) => {
     // where += ` AND \`name\` LIKE ${db.escape("%" + keyword + "%")} `;
     where += ` AND \`name\` LIKE ${db.escape(`%${keyword}%`)} `;
   }
+
+  birthBegin = moment(birthBegin);
+  if(birthBegin.isValid()){
+    where += ` AND birthday >= '${birthBegin.format(dateFormat)}' `;
+  }
+  birthEnd = moment(birthEnd);
+  if(birthEnd.isValid()){
+    where += ` AND birthday <= '${birthEnd.format(dateFormat)}' `;
+  }
+
 
   const sql = `SELECT COUNT(*) totalRows FROM address_book ${where}`;
   const [[{ totalRows }]] = await db.query(sql); // 取得總筆數
