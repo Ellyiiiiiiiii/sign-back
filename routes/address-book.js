@@ -173,4 +173,22 @@ router.delete("/:sid", async (req, res) => {
   }
   res.json(output);
 });
+
+// 呈現修改資料的表單
+router.get("/edit/:sid", async (req, res) => {
+  let sid = +req.params.sid || 0;
+  if (!sid) {
+    return res.redirect("/address-book");
+  }
+  const sql = `SELECT * FROM address_book WHERE sid=${sid}`;
+  const [rows] = await db.query(sql);
+  if (rows.length === 0) {
+    // 沒有該筆資料時, 跳回列表頁
+    return res.redirect("/address-book");
+  }
+
+  res.json(rows[0]);
+});
+// 處理修改資料的表單
+router.put("/edit/:sid", async (req, res) => {});
 export default router;
