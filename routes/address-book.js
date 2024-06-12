@@ -8,7 +8,7 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   res.locals.pageName = "ab-list";
 
-  let keyword = req.query.keyword || ''; // 預設值為空字串
+  let keyword = req.query.keyword || ""; // 預設值為空字串
 
   const perPage = 20; // 每頁最多有幾筆
   let page = +req.query.page || 1;
@@ -16,9 +16,9 @@ router.get("/", async (req, res) => {
     return res.redirect(`?page=1`); // 轉向
   }
 
-  let where = ' WHERE 1 ';
-  if(keyword){
-    where += ` AND \`name\` LIKE '%${keyword}%' `;
+  let where = " WHERE 1 ";
+  if (keyword) {
+    where += ` AND \`name\` LIKE ${db.escape("%" + keyword + "%")} `;
   }
 
   const sql = `SELECT COUNT(*) totalRows FROM address_book ${where}`;
@@ -51,7 +51,7 @@ router.get("/", async (req, res) => {
     page,
     perPage,
     rows,
-    qs: req.query  // query string 參數
+    qs: req.query, // query string 參數
   });
 });
 
