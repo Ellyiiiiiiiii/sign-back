@@ -17,39 +17,39 @@
           <div class="card-body">
             <h5 class="card-title">編輯資料</h5>
             <form name="form1" onsubmit="sendData(event)">
-              <input type="hidden" name="sid" value="<?= $row['sid'] ?>">
+              <input type="hidden" name="sid" value="<%= sid %>">
               <div class="mb-3">
                 <label for="name" class="form-label">編號</label>
-                <input type="text" class="form-control" value="<?= $row['sid'] ?>" disabled>
+                <input type="text" class="form-control" value="<%= sid %>" disabled>
               </div>
               <div class="mb-3">
                 <label for="name" class="form-label"><span class="required">**</span> 姓名</label>
-                <input type="text" class="form-control" id="name" name="name" value="<?= $row['name'] ?>">
+                <input type="text" class="form-control" id="name" name="name" value="<%= name %>">
                 <div class="form-text"></div>
               </div>
   
               <div class="mb-3">
                 <label for="email" class="form-label"><span class="required">**</span> email</label>
-                <input type="text" class="form-control" id="email" name="email" value="<?= $row['email'] ?>">
+                <input type="text" class="form-control" id="email" name="email" value="<%= email %>">
                 <div class="form-text"></div>
               </div>
   
               <div class="mb-3">
                 <label for="mobile" class="form-label">mobile</label>
-                <input type="text" class="form-control" id="mobile" name="mobile" value="<?= $row['mobile'] ?>">
+                <input type="text" class="form-control" id="mobile" name="mobile" value="<%= mobile %>">
                 <div class="form-text"></div>
               </div>
   
               <div class="mb-3">
                 <label for="birthday" class="form-label">birthday</label>
-                <input type="date" class="form-control" id="birthday" name="birthday" value="<?= $row['birthday'] ?>">
+                <input type="date" class="form-control" id="birthday" name="birthday" value="<%= birthday %>">
                 <div class="form-text"></div>
               </div>
   
               <div class="mb-3">
                 <label for="address" class="form-label">address</label>
   
-                <textarea class="form-control" id="address" name="address" rows="3"><?= $row['address'] ?></textarea>
+                <textarea class="form-control" id="address" name="address" rows="3"><%= address %></textarea>
                 <div class="form-text"></div>
               </div>
   
