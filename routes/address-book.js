@@ -5,18 +5,22 @@ import db from "./../utils/connect-mysql.js";
 const dateFormat = "YYYY-MM-DD";
 const router = express.Router();
 
-router.get("/", async (req, res) => {
-  res.locals.pageName = "ab-list";
+const getListData = async (req) => {
+
 
   let keyword = req.query.keyword || ""; // 預設值為空字串
 
   let birthBegin = req.query.birthBegin || ""; // 這個日期之後出生的
-  let birthEnd = req.query.birthEnd || "";     // 這個日期之前出生的
+  let birthEnd = req.query.birthEnd || ""; // 這個日期之前出生的
 
   const perPage = 20; // 每頁最多有幾筆
   let page = +req.query.page || 1;
   if (page < 1) {
-    return res.redirect(`?page=1`); // 轉向
+    return {
+      success: false,
+      redirect: `?page=1`, // 需要轉向
+      info: "page 值太小",
+    };
   }
 
   let where = " WHERE 1 ";
@@ -32,14 +36,13 @@ router.get("/", async (req, res) => {
   }
 
   birthBegin = moment(birthBegin);
-  if(birthBegin.isValid()){
+  if (birthBegin.isValid()) {
     where += ` AND birthday >= '${birthBegin.format(dateFormat)}' `;
   }
   birthEnd = moment(birthEnd);
-  if(birthEnd.isValid()){
+  if (birthEnd.isValid()) {
     where += ` AND birthday <= '${birthEnd.format(dateFormat)}' `;
   }
-
 
   const sql = `SELECT COUNT(*) totalRows FROM address_book ${where}`;
   const [[{ totalRows }]] = await db.query(sql); // 取得總筆數
@@ -49,7 +52,11 @@ router.get("/", async (req, res) => {
   if (totalRows > 0) {
     totalPages = Math.ceil(totalRows / perPage);
     if (page > totalPages) {
-      return res.redirect(`?page=${totalPages}`); // 轉向
+      return {
+        success: false,
+        redirect: `?page=${totalPages}`, // 需要轉向
+        info: "page 值太大",
+      };
     }
 
     const sql2 = `SELECT * FROM address_book ${where} ORDER BY sid DESC LIMIT ${
@@ -62,17 +69,29 @@ router.get("/", async (req, res) => {
       r.birthday = moment(r.birthday).format(dateFormat);
     });
   }
-
-  // res.json({ totalRows, totalPages, page, perPage, rows });
-
-  res.render("address-book/list", {
+  return {
+    success: true,
     totalRows,
     totalPages,
     page,
     perPage,
     rows,
-    qs: req.query, // query string 參數
-  });
-});
+    qs: req.query,
+  };
+};
 
+router.get("/", async (req, res) => {
+  res.locals.pageName = "ab-list";
+  const result = await getListData(req);
+
+  if(result.redirect){
+    return res.redirect(result.redirect)
+  }
+
+  res.render("address-book/list", result);
+});
+router.get("/api", async (req, res) => {
+  const result = await getListData(req);
+  res.json(result);
+});
 export default router;
