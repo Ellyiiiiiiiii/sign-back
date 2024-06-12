@@ -158,4 +158,19 @@ router.post("/add", upload.none(), async (req, res) => {
 */
 });
 
+// 比較符合 RESTful API 的寫法
+router.delete("/:sid", async (req, res) => {
+  const output = {
+    success: false,
+    result: {},
+  };
+  let sid = +req.params.sid || 0;
+  if (sid) {
+    const sql = `DELETE FROM address_book WHERE sid=${sid}`;
+    const [result] = await db.query(sql);
+    output.result = result;
+    output.success = !!result.affectedRows;
+  }
+  res.json(output);
+});
 export default router;
