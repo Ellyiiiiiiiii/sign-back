@@ -65,7 +65,9 @@ const getListData = async (req) => {
 
     rows.forEach((r) => {
       // "JS 的 Date 類型" 轉換為日期格式的字串
-      r.birthday = moment(r.birthday).format(dateFormat);
+      if (r.birthday) {
+        r.birthday = moment(r.birthday).format(dateFormat);
+      }
     });
   }
   return {
@@ -187,8 +189,13 @@ router.get("/edit/:sid", async (req, res) => {
     return res.redirect("/address-book");
   }
 
-  // res.json(rows[0]);
-  res.render("address-book/edit", rows[0]);
+  const row = rows[0];
+  if (row.birthday) {
+    // 日期格式轉換
+    row.birthday = moment(row.birthday).format(dateFormat);
+  }
+
+  res.render("address-book/edit", row);
 });
 // 處理修改資料的表單
 router.put("/edit/:sid", upload.none(), async (req, res) => {
