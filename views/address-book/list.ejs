@@ -5,13 +5,14 @@
         <div class="col-6">
           <nav aria-label="Page navigation example">
             <ul class="pagination">
-              <li class="page-item">
+
+              <li class="page-item <%= page===1 ? 'disabled' : '' %>">
                 <a class="page-link" href="?page=1">
                   <i class="fa-solid fa-circle-left"></i>
                 </a>
               </li>
 
-              <li class="page-item">
+              <li class="page-item <%= page===1 ? 'disabled' : '' %>">
                 <a class="page-link" href="?page=<%= page-1 %>">
                   <i class="fa-regular fa-circle-left"></i>
                 </a>
@@ -25,12 +26,13 @@
                   </li>
                   <% } %>
 
-                    <li class="page-item">
+                    <li class="page-item <%= page===totalPages ? 'disabled' : '' %>">
                       <a class="page-link" href="?page=<%= page+1 %>">
                         <i class="fa-regular fa-circle-right"></i>
                       </a>
                     </li>
-                    <li class="page-item">
+
+                    <li class="page-item <%= page===totalPages ? 'disabled' : '' %>">
                       <a class="page-link" href="?page=<%= totalPages %>">
                         <i class="fa-solid fa-circle-right"></i>
                       </a>
