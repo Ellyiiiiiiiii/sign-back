@@ -8,13 +8,20 @@ const router = express.Router();
 router.get("/", async (req, res) => {
   res.locals.pageName = "ab-list";
 
+  let keyword = req.query.keyword || ''; // 預設值為空字串
+
   const perPage = 20; // 每頁最多有幾筆
   let page = +req.query.page || 1;
   if (page < 1) {
     return res.redirect(`?page=1`); // 轉向
   }
 
-  const sql = "SELECT COUNT(*) totalRows FROM address_book";
+  let where = ' WHERE 1 ';
+  if(keyword){
+    where += ` AND \`name\` LIKE '%${keyword}%' `;
+  }
+
+  const sql = `SELECT COUNT(*) totalRows FROM address_book ${where}`;
   const [[{ totalRows }]] = await db.query(sql); // 取得總筆數
 
   let totalPages = 0; // 總頁數, 預設值設定 0
@@ -25,7 +32,7 @@ router.get("/", async (req, res) => {
       return res.redirect(`?page=${totalPages}`); // 轉向
     }
 
-    const sql2 = `SELECT * FROM address_book ORDER BY sid DESC LIMIT ${
+    const sql2 = `SELECT * FROM address_book ${where} ORDER BY sid DESC LIMIT ${
       (page - 1) * perPage
     }, ${perPage} `;
     [rows] = await db.query(sql2);
