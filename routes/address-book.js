@@ -127,6 +127,15 @@ router.post("/add", upload.none(), async (req, res) => {
   const sql2 = `INSERT INTO address_book set ?`;
   // data 物件的屬性, 對應到資料表的欄位
   const data = { ...req.body, created_at: new Date() };
+
+  data.birthday = moment(data.birthday);
+  if (data.birthday.isValid()) {
+    // 如果是正確的格式
+    data.birthday = data.birthday.format(dateFormat);
+  } else {
+    // 不是正確的日期格式, 就使用空值
+    data.birthday = null;
+  }
   try {
     const [result] = await db.query(sql2, [data]);
     output.result = result;
