@@ -22,7 +22,13 @@ router.get("/", async (req, res) => {
   let where = " WHERE 1 ";
   if (keyword) {
     // where += ` AND \`name\` LIKE ${db.escape("%" + keyword + "%")} `;
-    where += ` AND \`name\` LIKE ${db.escape(`%${keyword}%`)} `;
+    where += ` AND 
+    (
+      \`name\` LIKE ${db.escape(`%${keyword}%`)} 
+      OR
+      \`mobile\` LIKE ${db.escape(`%${keyword}%`)} 
+    )
+    `;
   }
 
   birthBegin = moment(birthBegin);
