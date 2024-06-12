@@ -7,33 +7,36 @@
             <ul class="pagination">
 
               <li class="page-item <%= page===1 ? 'disabled' : '' %>">
-                <a class="page-link" href="?page=1">
+                <a class="page-link" href="?<%= new URLSearchParams({...qs, page: 1}) %>">
                   <i class="fa-solid fa-circle-left"></i>
                 </a>
               </li>
 
               <li class="page-item <%= page===1 ? 'disabled' : '' %>">
-                <a class="page-link" href="?page=<%= page-1 %>">
+                <a class="page-link" href="?<%= new URLSearchParams({...qs, page: page-1}) %>">
                   <i class="fa-regular fa-circle-left"></i>
                 </a>
               </li>
 
-              <% for(let i=page-5; i<=page+5; i++) if(i>=1 && i<=totalPages){ %>
+              <% for(let i=page-5; i<=page+5; i++) if(i>=1 && i<=totalPages){ 
+                const paramsObj = {...qs, page: i};
+                
+                %>
                   <li class="page-item <%= i===page ? 'active' : '' %>">
-                    <a class="page-link" href="?page=<%= i %>">
+                    <a class="page-link" href="?<%= new URLSearchParams(paramsObj) %>">
                       <%= i %>
                     </a>
                   </li>
                   <% } %>
 
                     <li class="page-item <%= page===totalPages ? 'disabled' : '' %>">
-                      <a class="page-link" href="?page=<%= page+1 %>">
+                      <a class="page-link" href="?<%= new URLSearchParams({...qs, page: page+1}) %>">
                         <i class="fa-regular fa-circle-right"></i>
                       </a>
                     </li>
 
                     <li class="page-item <%= page===totalPages ? 'disabled' : '' %>">
-                      <a class="page-link" href="?page=<%= totalPages %>">
+                      <a class="page-link" href="?<%= new URLSearchParams({...qs, page: totalPages}) %>">
                         <i class="fa-solid fa-circle-right"></i>
                       </a>
                     </li>

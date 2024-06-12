@@ -51,6 +51,7 @@ router.get("/", async (req, res) => {
     page,
     perPage,
     rows,
+    qs: req.query  // query string 參數
   });
 });
 
