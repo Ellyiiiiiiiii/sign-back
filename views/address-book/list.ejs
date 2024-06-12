@@ -18,10 +18,7 @@
                 </a>
               </li>
 
-              <% for(let i=page-5; i<=page+5; i++) if(i>=1 && i<=totalPages){ 
-                const paramsObj = {...qs, page: i};
-                
-                %>
+              <% for(let i=page-5; i<=page+5; i++) if(i>=1 && i<=totalPages){ const paramsObj={...qs, page: i}; %>
                   <li class="page-item <%= i===page ? 'active' : '' %>">
                     <a class="page-link" href="?<%= new URLSearchParams(paramsObj) %>">
                       <%= i %>
@@ -46,8 +43,8 @@
         <div class="col-6">
 
           <form class="d-flex" role="search">
-            <input class="form-control me-2" type="search" name="keyword"
-            placeholder="Search" aria-label="Search" value="<%= qs.keyword ? qs.keyword : '' %>">
+            <input class="form-control me-2" type="search" name="keyword" placeholder="Search" aria-label="Search"
+              value="<%= qs.keyword ? qs.keyword : '' %>">
             <button class="btn btn-outline-success" type="submit">Search</button>
           </form>
 
@@ -59,17 +56,23 @@
           <table class="table table-bordered table-striped">
             <thead>
               <tr>
+                <th><i class="fa-solid fa-trash"></i></th>
                 <th>#</th>
                 <th>姓名</th>
                 <th>電郵</th>
                 <th>手機</th>
                 <th>生日</th>
                 <th>地址</th>
+                <th><i class="fa-solid fa-pen-to-square"></i></th>
               </tr>
             </thead>
             <tbody>
               <% for(let r of rows){ %>
                 <tr>
+                  <td>
+                    <a href="#"><i class="fa-solid fa-trash"></i>
+                    </a>
+                  </td>
                   <td>
                     <%= r.sid %>
                   </td>
@@ -87,6 +90,11 @@
                   </td>
                   <td>
                     <%= r.address %>
+                  </td>
+                  <td>
+                    <a href="#">
+                      <i class="fa-solid fa-pen-to-square"></i>
+                    </a>
                   </td>
                 </tr>
                 <% } %>
