@@ -94,4 +94,16 @@ router.get("/api", async (req, res) => {
   const result = await getListData(req);
   res.json(result);
 });
+
+router.get("/add", async (req, res) => {
+  // 呈現新增資料的表單
+  res.render("address-book/add");
+});
+
+router.post("/add", async (req, res) => {
+  // 處理表單資料
+  res.json(req.body);
+});
+
+
 export default router;
