@@ -18,7 +18,8 @@ router.get("/", async (req, res) => {
 
   let where = " WHERE 1 ";
   if (keyword) {
-    where += ` AND \`name\` LIKE ${db.escape("%" + keyword + "%")} `;
+    // where += ` AND \`name\` LIKE ${db.escape("%" + keyword + "%")} `;
+    where += ` AND \`name\` LIKE ${db.escape(`%${keyword}%`)} `;
   }
 
   const sql = `SELECT COUNT(*) totalRows FROM address_book ${where}`;
