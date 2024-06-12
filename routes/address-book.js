@@ -191,7 +191,7 @@ router.get("/edit/:sid", async (req, res) => {
   res.render("address-book/edit", rows[0]);
 });
 // 處理修改資料的表單
-router.put("/edit/:sid", async (req, res) => {
+router.put("/edit/:sid", upload.none(), async (req, res) => {
   res.json(req.body);
 });
 export default router;

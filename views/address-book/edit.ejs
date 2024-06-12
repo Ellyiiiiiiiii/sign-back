@@ -77,7 +77,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">繼續修改</button>
-          <a href="list.php" class="btn btn-primary">到列表頁</a>
+          <a href="/address-book" class="btn btn-primary">到列表頁</a>
         </div>
       </div>
     </div>
@@ -97,7 +97,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">繼續修改</button>
-          <a href="list.php" class="btn btn-primary">到列表頁</a>
+          <a href="/address-book" class="btn btn-primary">到列表頁</a>
         </div>
       </div>
     </div>
@@ -143,8 +143,8 @@
         if (isPass) {
           const fd = new FormData(document.form1); // 建立一個只有資料的表單物件
     
-          fetch('edit-api.php', {
-              method: 'POST',
+          fetch('', {
+              method: 'PUT',
               body: fd, // 預設的 Content-Type: multipart/form-data
             })
             .then(r => r.json())
