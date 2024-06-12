@@ -96,6 +96,7 @@ router.get("/api", async (req, res) => {
 });
 
 router.get("/add", async (req, res) => {
+  res.locals.pageName = "ab-add";
   // 呈現新增資料的表單
   res.render("address-book/add");
 });
