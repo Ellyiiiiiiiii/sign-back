@@ -7,8 +7,6 @@ const dateFormat = "YYYY-MM-DD";
 const router = express.Router();
 
 const getListData = async (req) => {
-
-
   let keyword = req.query.keyword || ""; // 預設值為空字串
 
   let birthBegin = req.query.birthBegin || ""; // 這個日期之後出生的
@@ -85,8 +83,8 @@ router.get("/", async (req, res) => {
   res.locals.pageName = "ab-list";
   const result = await getListData(req);
 
-  if(result.redirect){
-    return res.redirect(result.redirect)
+  if (result.redirect) {
+    return res.redirect(result.redirect);
   }
 
   res.render("address-book/list", result);
@@ -104,8 +102,33 @@ router.get("/add", async (req, res) => {
 
 router.post("/add", upload.none(), async (req, res) => {
   // 處理表單資料
-  res.json(req.body);
-});
 
+  // TODO: 欄位資料檢查
+
+  const sql = `INSERT INTO address_book 
+  ( name, email, mobile, birthday, address, created_at) VALUES (
+    ?, ?, ?, ?, ?, NOW()
+  )`;
+
+  const [result] = await db.query(sql, [
+    req.body.name,
+    req.body.email,
+    req.body.mobile,
+    req.body.birthday,
+    req.body.address,
+  ]);
+/*
+{
+    "fieldCount": 0,
+    "affectedRows": 1,
+    "insertId": 1011,
+    "info": "",
+    "serverStatus": 2,
+    "warningStatus": 0,
+    "changedRows": 0
+}
+*/
+  res.json(result);
+});
 
 export default router;
