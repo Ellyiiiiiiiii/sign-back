@@ -101,10 +101,16 @@ router.get("/add", async (req, res) => {
 });
 
 router.post("/add", upload.none(), async (req, res) => {
+  const output = {
+    success: false,
+    bodyData: req.body,
+    result: {},
+  };
   // 處理表單資料
 
   // TODO: 欄位資料檢查
 
+  /*
   const sql = `INSERT INTO address_book 
   ( name, email, mobile, birthday, address, created_at) VALUES (
     ?, ?, ?, ?, ?, NOW()
@@ -117,7 +123,20 @@ router.post("/add", upload.none(), async (req, res) => {
     req.body.birthday,
     req.body.address,
   ]);
-/*
+  */
+  const sql2 = `INSERT INTO address_book set ?`;
+  // data 物件的屬性, 對應到資料表的欄位
+  const data = { ...req.body, created_at: new Date() };
+  try {
+    const [result] = await db.query(sql2, [data]);
+    output.result = result;
+    output.success = !!result.affectedRows;
+  } catch (ex) {
+    // sql 發生錯誤
+    output.error = ex; // 開發時期除錯
+  }
+  res.json(output);
+  /*
 {
     "fieldCount": 0,
     "affectedRows": 1,
@@ -128,7 +147,6 @@ router.post("/add", upload.none(), async (req, res) => {
     "changedRows": 0
 }
 */
-  res.json(result);
 });
 
 export default router;
