@@ -5,6 +5,18 @@
         <div class="col-6">
           <nav aria-label="Page navigation example">
             <ul class="pagination">
+              <li class="page-item">
+                <a class="page-link" href="?page=1">
+                  <i class="fa-solid fa-circle-left"></i>
+                </a>
+              </li>
+
+              <li class="page-item">
+                <a class="page-link" href="?page=<%= page-1 %>">
+                  <i class="fa-regular fa-circle-left"></i>
+                </a>
+              </li>
+
               <% for(let i=page-5; i<=page+5; i++) if(i>=1 && i<=totalPages){ %>
                   <li class="page-item <%= i===page ? 'active' : '' %>">
                     <a class="page-link" href="?page=<%= i %>">
@@ -12,6 +24,17 @@
                     </a>
                   </li>
                   <% } %>
+
+                    <li class="page-item">
+                      <a class="page-link" href="?page=<%= page+1 %>">
+                        <i class="fa-regular fa-circle-right"></i>
+                      </a>
+                    </li>
+                    <li class="page-item">
+                      <a class="page-link" href="?page=<%= totalPages %>">
+                        <i class="fa-solid fa-circle-right"></i>
+                      </a>
+                    </li>
             </ul>
           </nav>
         </div>
