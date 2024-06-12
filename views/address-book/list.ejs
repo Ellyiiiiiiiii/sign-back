@@ -70,7 +70,7 @@
               <% for(let r of rows){ %>
                 <tr>
                   <td>
-                    <a href="#"><i class="fa-solid fa-trash"></i>
+                    <a href="javascript: deleteOne(<%= r.sid %>)"><i class="fa-solid fa-trash"></i>
                     </a>
                   </td>
                   <td>
@@ -105,4 +105,16 @@
       </div>
     </div>
     <%- include("../parts/scripts") %>
+      <script>
+        const deleteOne = async sid => {
+          if (confirm(`是否要刪除編號為 ${sid} 的資料?`)) {
+            const r = await fetch(`/address-book/${sid}`, {
+              method: 'DELETE'
+            });
+            const result = await r.json();
+            console.log(result);
+            location.reload(); // 重載頁面
+          }
+        };
+      </script>
       <%- include("../parts/html-foot") %>
