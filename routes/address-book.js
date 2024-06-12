@@ -1,6 +1,8 @@
 import express from "express";
+import moment from "moment-timezone";
 import db from "./../utils/connect-mysql.js";
 
+const dateFormat = "YYYY-MM-DD";
 const router = express.Router();
 
 router.get("/", async (req, res) => {
@@ -27,11 +29,22 @@ router.get("/", async (req, res) => {
       (page - 1) * perPage
     }, ${perPage} `;
     [rows] = await db.query(sql2);
+
+    rows.forEach((r) => {
+      // "JS 的 Date 類型" 轉換為日期格式的字串
+      r.birthday = moment(r.birthday).format(dateFormat);
+    });
   }
 
   // res.json({ totalRows, totalPages, page, perPage, rows });
 
-  res.render("address-book/list", { totalRows, totalPages, page, perPage, rows });
+  res.render("address-book/list", {
+    totalRows,
+    totalPages,
+    page,
+    perPage,
+    rows,
+  });
 });
 
 export default router;
