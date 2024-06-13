@@ -184,6 +184,11 @@ app.get("/zod2/:index?", async (req, res) => {
   res.json(result);
 });
 
+app.get("/yahoo", async (req, res) => {
+  const r = await fetch("https://tw.yahoo.com/");
+  const txt = await r.text();
+  res.send(txt);
+});
 // ************* 設定靜態內容資料夾 *************
 app.use(express.static("public"));
 app.use("/bootstrap", express.static("node_modules/bootstrap/dist"));
