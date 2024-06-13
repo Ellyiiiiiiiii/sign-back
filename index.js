@@ -5,7 +5,7 @@ import express from "express";
 import multer from "multer";
 import sales from "./data/sales.js";
 import { z } from "zod";
-
+import cors from "cors";
 // const upload = multer({ dest: "tmp_uploads/" });
 import upload from "./utils/upload-imgs.js";
 import admin2Router from "./routes/admin2.js";
@@ -23,6 +23,7 @@ const sessionStore = new MysqlStore({}, db);
 app.set("view engine", "ejs");
 
 // Top-level middlewares
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
@@ -158,7 +159,7 @@ app.get("/zod-email/:email", async (req, res) => {
   res.json(result);
 });
 app.get("/zod2/:index?", async (req, res) => {
-  const index = +req.params.index || 0
+  const index = +req.params.index || 0;
   const schema = z.object({
     account: z.string().email({ message: "錯誤的 email 格式" }),
     password: z.string().min(6, "最少 6 個字元").max(20, "最多 20 個字元"),
@@ -176,7 +177,7 @@ app.get("/zod2/:index?", async (req, res) => {
       account: "shinder@test.com",
       password: "123fsjfj3845",
     },
-  ]
+  ];
 
   const result = schema.safeParse(ar[index]);
 
