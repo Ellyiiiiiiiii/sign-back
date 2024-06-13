@@ -88,8 +88,12 @@ router.get("/", async (req, res) => {
   if (result.redirect) {
     return res.redirect(result.redirect);
   }
+  if(req.session.admin){
+    res.render("address-book/list", result);
+  } else {
+    res.render("address-book/list-no-admin", result);
+  }
 
-  res.render("address-book/list", result);
 });
 router.get("/api", async (req, res) => {
   const result = await getListData(req);
