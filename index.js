@@ -50,6 +50,7 @@ app.use(
 // ******************* 自訂 top-level middleware
 app.use((req, res, next) => {
   // res.send("<p>直接被中斷</p>"); // 不應該回應
+  res.locals.session = req.session; // 是讓 template 可以使用(讀取) session 
   res.locals.title = "小新的網站"; // 預設的頁面 title
   res.locals.pageName = "";
   next();
@@ -203,7 +204,7 @@ app.post("/login", async (req, res) => {
   const [rows] = await db.query(sql, [req.body.email]);
 
   if (!rows.length) {
-    output.code = 400;
+    output.code = 400; // 帳號是錯的
     return res.json(output);
   }
   const row = rows[0];
@@ -219,7 +220,7 @@ app.post("/login", async (req, res) => {
       nickname: row.nickname,
     };
   } else {
-    output.code = 430;
+    output.code = 430; // 密碼是錯的
   }
 
   res.json(output);
