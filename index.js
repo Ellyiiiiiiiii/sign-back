@@ -152,8 +152,33 @@ app.get("/try-db", async (req, res) => {
 
 // zod 套件測試
 app.get("/zod-email/:email", async (req, res) => {
-  const emailSchema = z.string().email({message:"錯誤的 email 格式"});
+  const emailSchema = z.string().email({ message: "錯誤的 email 格式" });
   const result = emailSchema.safeParse(req.params.email);
+
+  res.json(result);
+});
+app.get("/zod2/:index?", async (req, res) => {
+  const index = +req.params.index || 0
+  const schema = z.object({
+    account: z.string().email({ message: "錯誤的 email 格式" }),
+    password: z.string().min(6, "最少 6 個字元").max(20, "最多 20 個字元"),
+  });
+  const ar = [
+    {
+      account: "shinder",
+      password: "12345",
+    },
+    {
+      account: "shinder@test.com",
+      password: "12345398453984598sjhfsjfj3845",
+    },
+    {
+      account: "shinder@test.com",
+      password: "123fsjfj3845",
+    },
+  ]
+
+  const result = schema.safeParse(ar[index]);
 
   res.json(result);
 });
