@@ -26,7 +26,7 @@ app.set("view engine", "ejs");
 const corsOptions = {
   credentials: true,
   origin: (origin, callback) => {
-    console.log({ origin });
+    // console.log({ origin });
     callback(null, true); // 允許所有網站取得資源
   },
 };
@@ -190,6 +190,12 @@ app.get("/zod2/:index?", async (req, res) => {
 
   res.json(result);
 });
+
+app.get("/login", async (req, res) => {
+  res.render("login");
+});
+app.post("/login", async (req, res) => {});
+app.get("/logout", async (req, res) => {});
 
 app.get("/yahoo", async (req, res) => {
   const r = await fetch("https://tw.yahoo.com/");
