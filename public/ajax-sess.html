@@ -11,11 +11,14 @@
   <pre id="info"></pre>
 
   <script>
-    fetch('http://localhost:3001/try-sess')
+    fetch('http://localhost:3001/try-sess', {
+      credentials: "include"
+    })
       .then(r => r.json())
       .then(data => {
         info.innerHTML = JSON.stringify(data, null, 4);
       })
+      .catch(ex => console.log(ex))
   </script>
 
 </body>
