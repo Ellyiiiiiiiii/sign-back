@@ -178,6 +178,8 @@ router.delete("/:sid", async (req, res) => {
 
 // 呈現修改資料的表單
 router.get("/edit/:sid", async (req, res) => {
+  // TODO: 欄位資料檢查
+
   let sid = +req.params.sid || 0;
   if (!sid) {
     return res.redirect("/address-book");
@@ -199,6 +201,12 @@ router.get("/edit/:sid", async (req, res) => {
 });
 // 處理修改資料的表單
 router.put("/edit/:sid", upload.none(), async (req, res) => {
+  const output = {
+    success: false,
+    bodyData: req.body,
+    result: null,
+  };
+
   let sid = +req.params.sid || 0;
   if (!sid) {
     return res.json({ success: false, info: "不正確的主鍵" });
@@ -206,6 +214,9 @@ router.put("/edit/:sid", upload.none(), async (req, res) => {
   const sql = "UPDATE address_book SET ? WHERE sid=?";
   const [result] = await db.query(sql, [req.body, sid]);
 
-  res.json(result);
+  output.result = result;
+  output.success = !!(result.affectedRows && result.changedRows);
+
+  res.json(output);
 });
 export default router;
