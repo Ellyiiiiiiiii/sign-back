@@ -6,6 +6,7 @@ import multer from "multer";
 import sales from "./data/sales.js";
 import { z } from "zod";
 import cors from "cors";
+import bcrypt from "bcrypt";
 // const upload = multer({ dest: "tmp_uploads/" });
 import upload from "./utils/upload-imgs.js";
 import admin2Router from "./routes/admin2.js";
@@ -185,9 +186,7 @@ app.get("/zod2/:index?", async (req, res) => {
       password: "123fsjfj3845",
     },
   ];
-
   const result = schema.safeParse(ar[index]);
-
   res.json(result);
 });
 
@@ -195,7 +194,35 @@ app.get("/login", async (req, res) => {
   res.render("login");
 });
 app.post("/login", async (req, res) => {
-  res.json(req.body);
+  const output = {
+    success: false,
+    code: 0,
+  };
+
+  const sql = "SELECT * FROM members WHERE email=?";
+  const [rows] = await db.query(sql, [req.body.email]);
+
+  if (!rows.length) {
+    output.code = 400;
+    return res.json(output);
+  }
+  const row = rows[0];
+  const result = await bcrypt.compare(req.body.password, row.password);
+  if (result) {
+    output.success = true;
+    output.code = 200;
+
+    // 登入成功, 狀態記錄在 session 裡
+    req.session.admin = {
+      id: row.id,
+      email: row.email,
+      nickname: row.nickname,
+    };
+  } else {
+    output.code = 430;
+  }
+
+  res.json(output);
 });
 app.get("/logout", async (req, res) => {});
 
