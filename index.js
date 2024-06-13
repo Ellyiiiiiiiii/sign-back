@@ -4,6 +4,7 @@
 import express from "express";
 import multer from "multer";
 import sales from "./data/sales.js";
+import { z } from "zod";
 
 // const upload = multer({ dest: "tmp_uploads/" });
 import upload from "./utils/upload-imgs.js";
@@ -40,8 +41,8 @@ app.use(
 // ******************* 自訂 top-level middleware
 app.use((req, res, next) => {
   // res.send("<p>直接被中斷</p>"); // 不應該回應
-  res.locals.title = '小新的網站'; // 預設的頁面 title
-  res.locals.pageName = '';
+  res.locals.title = "小新的網站"; // 預設的頁面 title
+  res.locals.pageName = "";
   next();
 });
 
@@ -54,8 +55,8 @@ app.get("/", (req, res) => {
 });
 
 app.get("/json-sales", (req, res) => {
-  res.locals.title = 'JSON-SALES | ' + res.locals.title;
-  res.locals.pageName = 'json-sales';
+  res.locals.title = "JSON-SALES | " + res.locals.title;
+  res.locals.pageName = "json-sales";
 
   // 輸出 application/json 的格式
   // res.json(salesArray);
@@ -69,8 +70,8 @@ app.get("/try-qs", (req, res) => {
 });
 
 app.get("/try-post-form", (req, res) => {
-  res.locals.title = '測試表單 | ' + res.locals.title;
-  res.locals.pageName = 'tpf';
+  res.locals.title = "測試表單 | " + res.locals.title;
+  res.locals.pageName = "tpf";
   // res.render("try-post-form", { account: "", password: "" });
   res.render("try-post-form");
 });
@@ -147,6 +148,14 @@ app.get("/try-db", async (req, res) => {
   //const [rows, fields] = await db.query(sql);
   const [rows] = await db.query(sql);
   res.json(rows);
+});
+
+// zod 套件測試
+app.get("/zod-email/:email", async (req, res) => {
+  const emailSchema = z.string().email({message:"錯誤的 email 格式"});
+  const result = emailSchema.safeParse(req.params.email);
+
+  res.json(result);
 });
 
 // ************* 設定靜態內容資料夾 *************
