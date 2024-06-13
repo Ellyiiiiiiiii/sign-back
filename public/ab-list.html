@@ -14,10 +14,33 @@
     let pageData;
     const content = document.querySelector('#content');
 
-    const renderTable = (rows) => {
+    const renderTable = (data) => {
+      const rows = data.rows;
 
       return `
         <div class="container">
+          <div class="row">
+            <div class="col">
+              <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                ${Array(11).fill(1).map((v, i) => {
+                  const p = i - 5 + data.page;
+                  if (p < 1 || p > data.totalPages) {
+                    return '';
+                  }
+                  return `
+                      <li class="page-item">
+                        <a class="page-link" href="?page=${p}">
+                          ${p}
+                        </a>
+                      </li>
+                    `;
+                  }).join('')
+                }
+                </>
+              </nav>
+            </div>
+          </div>
           <div class="row">
             <div class="col">
               <table class="table table-bordered table-striped">
@@ -53,12 +76,12 @@
     };
 
 
-    fetch('http://localhost:3001/address-book/api')
+    fetch('http://localhost:3001/address-book/api'+location.search)
       .then(r => r.json())
       .then(data => {
         console.log(data);
         pageData = data; // 放到全域變數
-        content.innerHTML = renderTable(pageData.rows);
+        content.innerHTML = renderTable(pageData);
       })
 
   </script>
