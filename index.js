@@ -23,7 +23,14 @@ const sessionStore = new MysqlStore({}, db);
 app.set("view engine", "ejs");
 
 // Top-level middlewares
-app.use(cors());
+const corsOptions = {
+  credentials: true,
+  origin: (origin, callback) => {
+    console.log({ origin });
+    callback(null, true); // 允許所有網站取得資源
+  },
+};
+app.use(cors(corsOptions));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(
