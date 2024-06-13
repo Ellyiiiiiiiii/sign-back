@@ -62,11 +62,18 @@
       <script>
         const sendData = e => {
           e.preventDefault();
-          const fd = new FormData(document.form1); // 建立一個只有資料的表單物件
+
+          const obj = {
+            email: document.form1.email.value,
+            password: document.form1.password.value,
+          };
 
           fetch('', {
             method: 'POST',
-            body: fd, // 預設的 Content-Type: multipart/form-data
+            body: JSON.stringify(obj),
+            headers: {
+              'Content-Type': 'application/json'
+            }
           })
             .then(r => r.json())
             .then(data => {

@@ -194,7 +194,9 @@ app.get("/zod2/:index?", async (req, res) => {
 app.get("/login", async (req, res) => {
   res.render("login");
 });
-app.post("/login", async (req, res) => {});
+app.post("/login", async (req, res) => {
+  res.json(req.body);
+});
 app.get("/logout", async (req, res) => {});
 
 app.get("/yahoo", async (req, res) => {
