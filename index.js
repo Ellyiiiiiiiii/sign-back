@@ -224,7 +224,11 @@ app.post("/login", async (req, res) => {
 
   res.json(output);
 });
-app.get("/logout", async (req, res) => {});
+// 登出
+app.get("/logout", async (req, res) => {
+  delete req.session.admin;
+  res.redirect("/");
+});
 
 app.get("/yahoo", async (req, res) => {
   const r = await fetch("https://tw.yahoo.com/");
