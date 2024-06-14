@@ -66,11 +66,40 @@ router.get("/", async (req, res) => {
 });
 
 // **************** 變更某項的數量
-router.put("/update/:pid/:qty", async (req, res) => {});
+router.put("/update/:pid/:qty", async (req, res) => {
+  const pid = +req.params.pid || 0; // 編號
+  const qty = +req.params.qty || 0;
+  if (!pid || !qty) {
+    return res.json({ success: false, info: "沒有商品編號或沒有數量" });
+  }
+  const sql = `UPDATE cart2 SET quantity=? WHERE member_id=? AND product_id=?`;
+  const [result] = await db.query(sql, [qty, req.session.admin.id, pid]);
+
+  res.json({
+    success: !!(result.affectedRows && result.changedRows),
+    pid,
+    qty,
+  });
+});
 
 // **************** 移除某項
-router.delete("/remove/:pid", async (req, res) => {});
+router.delete("/remove/:pid", async (req, res) => {
+  const pid = +req.params.pid || 0; // 編號
+  const sql = `DELETE FROM cart2 WHERE member_id=? AND product_id=?`;
+  const [result] = await db.query(sql, [req.session.admin.id, pid]);
+  res.json({
+    success: !!result.affectedRows,
+    pid,
+  });
+});
 
 // **************** 清空購物車
-router.delete("/clear", async (req, res) => {});
+router.delete("/clear", async (req, res) => {
+  const sql = `DELETE FROM cart2 WHERE member_id=?`;
+  const [result] = await db.query(sql, [req.session.admin.id]);
+  res.json({
+    success: !!result.affectedRows,
+    affectedRows: result.affectedRows,
+  });
+});
 export default router;
