@@ -19,13 +19,14 @@ router.use((req, res, next) => {
   next();
 });
 
+/*
 router.get("/", async (req, res) => {
   res.json({ method: "GET" });
 });
 router.post("/", async (req, res) => {
   res.json({ method: "POST" });
 });
-
+*/
 // **************** 加入商品
 router.post("/add/:pid/:qty?", async (req, res) => {
   const pid = +req.params.pid || 0; // 編號
@@ -48,5 +49,15 @@ router.post("/add/:pid/:qty?", async (req, res) => {
     success: !!result.affectedRows,
   });
 });
+// **************** 取得內容
+router.get("/", async (req, res) => {});
 
+// **************** 變更某項的數量
+router.put("/update/:pid/:qty", async (req, res) => {});
+
+// **************** 移除某項
+router.delete("/remove/:pid", async (req, res) => {});
+
+// **************** 清空購物車
+router.delete("/clear", async (req, res) => {});
 export default router;
