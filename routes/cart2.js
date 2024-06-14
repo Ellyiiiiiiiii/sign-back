@@ -16,6 +16,14 @@ router.use((req, res, next) => {
   if (!req.session.admin) {
     return res.status(403).json({ success: false, info: "需要登入會員" });
   }
+  next();
+});
+
+router.get("/", async (req, res) => {
+  res.json({ method: "GET" });
+});
+router.post("/", async (req, res) => {
+  res.json({ method: "POST" });
 });
 
 // **************** 加入商品
@@ -32,12 +40,12 @@ router.post("/add/:pid/:qty?", async (req, res) => {
     return res.json({ success: false, info: "沒有這項商品" });
   }
   // 寫入 cart2 表
-  const sql2 = `INSERT INTO cart2 (member_id, product_id) 
-    VALUES (${req.session.admin.id}, ${pid})`;
+  const sql2 = `INSERT INTO cart2 (member_id, product_id, quantity) 
+    VALUES (${req.session.admin.id}, ${pid}, ${qty})`;
 
   const [result] = await db.query(sql2);
   res.json({
-    success: !! result.affectedRows
+    success: !!result.affectedRows,
   });
 });
 
