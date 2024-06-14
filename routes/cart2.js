@@ -10,8 +10,13 @@ const router = express.Router();
   D: 刪除某一項, 清空購物車
   */
 
-router.get("/:", (req, res) => {
-
+// 登入後再可以使用
+router.use((req, res, next) => {
+  if (!req.session.admin) {
+    return res.status(403).json({ success: false, info: "需要登入會員" });
+  }
 });
+
+router.get("/:", (req, res) => {});
 
 export default router;
