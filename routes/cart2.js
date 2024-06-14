@@ -50,7 +50,20 @@ router.post("/add/:pid/:qty?", async (req, res) => {
   });
 });
 // **************** 取得內容
-router.get("/", async (req, res) => {});
+router.get("/", async (req, res) => {
+  const sql = `
+  SELECT 
+    c.product_id, c.quantity, p.author, p.bookname, 
+    p.book_id, p.publish_date, p.price
+  FROM cart2 c
+    JOIN products p ON c.product_id=p.sid
+    WHERE c.member_id=${req.session.admin.id}
+    ORDER BY c.created_at
+  `;
+
+  const [rows] = await db.query(sql);
+  res.json(rows);
+});
 
 // **************** 變更某項的數量
 router.put("/update/:pid/:qty", async (req, res) => {});
