@@ -17,6 +17,27 @@ router.use((req, res, next) => {
   }
 });
 
-router.get("/", (req, res) => {});
+// **************** 加入商品
+router.post("/add/:pid/:qty?", async (req, res) => {
+  const pid = +req.params.pid || 0; // 編號
+  const qty = +req.params.qty || 1;
+  if (!pid) {
+    return res.json({ success: false, info: "沒有商品編號" });
+  }
+  // 查看商品資料
+  const sql = "SELECT sid FROM products WHERE sid=?";
+  const [rows] = await db.query(sql, [pid]);
+  if (!rows.length) {
+    return res.json({ success: false, info: "沒有這項商品" });
+  }
+  // 寫入 cart2 表
+  const sql2 = `INSERT INTO cart2 (member_id, product_id) 
+    VALUES (${req.session.admin.id}, ${pid})`;
+
+  const [result] = await db.query(sql2);
+  res.json({
+    success: !! result.affectedRows
+  });
+});
 
 export default router;
