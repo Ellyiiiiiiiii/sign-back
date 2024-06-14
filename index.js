@@ -51,7 +51,7 @@ app.use(
 // ******************* 自訂 top-level middleware
 app.use((req, res, next) => {
   // res.send("<p>直接被中斷</p>"); // 不應該回應
-  res.locals.session = req.session; // 是讓 template 可以使用(讀取) session 
+  res.locals.session = req.session; // 是讓 template 可以使用(讀取) session
   res.locals.title = "小新的網站"; // 預設的頁面 title
   res.locals.pageName = "";
   next();
@@ -238,6 +238,20 @@ app.get("/yahoo", async (req, res) => {
   const txt = await r.text();
   res.send(txt);
 });
+
+// ***** 測試用: 快速登入
+app.get("/q/:mid", async (req, res) => {
+  const mid = +req.params.mid || 0;
+
+  const sql = `SELECT id, email, nickname FROM members WHERE id=${mid}`;
+  const [rows] = await db.query(sql);
+  if (rows.length) {
+    req.session.admin = rows[0];
+    return res.json({ success: true, ...rows[0] });
+  }
+  res.json({ success: false });
+});
+
 // ************* 設定靜態內容資料夾 *************
 app.use(express.static("public"));
 app.use("/bootstrap", express.static("node_modules/bootstrap/dist"));
