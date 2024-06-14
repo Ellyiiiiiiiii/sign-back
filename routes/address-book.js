@@ -81,6 +81,18 @@ const getListData = async (req) => {
   };
 };
 
+// router top-level middleware
+
+router.use((req, res, next) => {
+  if (req.session.admin) {
+    // 如果有登入就讓他通過
+    next();
+  } else {
+    // res.status(403).send("<h1>無權訪問此頁面</h1>"); // 直接擋掉
+    res.redirect(`/login?u=${req.originalUrl}`); // 導到登入頁
+  }
+});
+
 router.get("/", async (req, res) => {
   res.locals.pageName = "ab-list";
   const result = await getListData(req);
@@ -88,12 +100,11 @@ router.get("/", async (req, res) => {
   if (result.redirect) {
     return res.redirect(result.redirect);
   }
-  if(req.session.admin){
+  if (req.session.admin) {
     res.render("address-book/list", result);
   } else {
     res.render("address-book/list-no-admin", result);
   }
-
 });
 router.get("/api", async (req, res) => {
   const result = await getListData(req);
