@@ -15,6 +15,7 @@ import cart2Router from "./routes/cart2.js";
 import session from "express-session";
 import mysql_session from "express-mysql-session";
 import moment from "moment-timezone";
+import jwt from "jsonwebtoken";
 
 import db from "./utils/connect-mysql.js";
 
@@ -250,6 +251,19 @@ app.get("/q/:mid", async (req, res) => {
     return res.json({ success: true, ...rows[0] });
   }
   res.json({ success: false });
+});
+
+// 測試 JWT
+app.get("/jwt1", async (req, res) => {
+  console.log(process.env.JWT_KEY); // 查看有沒有取得加密的 key
+  const data = {
+    id: 26,
+    email: "shin@test.com",
+  };
+
+  const token = jwt.sign(data, process.env.JWT_KEY);
+  res.send(token);
+  // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsImVtYWlsIjoic2hpbkB0ZXN0LmNvbSIsImlhdCI6MTcxOTk3MDAxM30.4UV6nwNQkSnSYPFUdJmlqnGNU186Zv4tU0W5uJrB2B4
 });
 
 // ************* 設定靜態內容資料夾 *************
