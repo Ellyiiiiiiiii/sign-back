@@ -261,9 +261,16 @@ app.get("/jwt1", async (req, res) => {
     email: "shin@test.com",
   };
 
-  const token = jwt.sign(data, process.env.JWT_KEY);
+  const token = jwt.sign(data, process.env.JWT_KEY); // 加密
   res.send(token);
   // eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsImVtYWlsIjoic2hpbkB0ZXN0LmNvbSIsImlhdCI6MTcxOTk3MDAxM30.4UV6nwNQkSnSYPFUdJmlqnGNU186Zv4tU0W5uJrB2B4
+});
+app.get("/jwt2", async (req, res) => {
+  const token =
+    "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjYsImVtYWlsIjoic2hpbkB0ZXN0LmNvbSIsImlhdCI6MTcxOTk3MDAxM30.4UV6nwNQkSnSYPFUdJmlqnGNU186Zv4tU0W5uJrB2B4";
+  const payload = jwt.verify(token, process.env.JWT_KEY); // 解密
+
+  res.json(payload);
 });
 
 // ************* 設定靜態內容資料夾 *************
