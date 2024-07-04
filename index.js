@@ -228,6 +228,55 @@ app.post("/login", async (req, res) => {
 
   res.json(output);
 });
+app.post("/login-jwt", async (req, res) => {
+  const output = {
+    success: false,
+    code: 0,
+    data: {
+      id: 0,
+      account: "",
+      nickname: "",
+      token: "",
+    },
+  };
+
+  // 取得登入的兩個欄位資料
+  let { account, password } = req.body || {};
+
+  if (!account || !password) {
+    output.code = 400;
+    return res.json(output);
+  }
+
+  const sql = "SELECT * FROM members WHERE email=?";
+  const [rows] = await db.query(sql, [account]);
+
+  if (!rows.length) {
+    output.code = 410; // 帳號是錯的
+    return res.json(output);
+  }
+  const row = rows[0];
+  const result = await bcrypt.compare(password, row.password);
+  if (result) {
+    output.success = true;
+    output.code = 200;
+
+    const token = jwt.sign(
+      { id: row.id, account: row.email },
+      process.env.JWT_KEY
+    );
+    output.data = {
+      id: row.id,
+      account: row.email,
+      nickname: row.nickname,
+      token,
+    };
+  } else {
+    output.code = 430; // 密碼是錯的
+  }
+
+  res.json(output);
+});
 // 登出
 app.get("/logout", async (req, res) => {
   delete req.session.admin;
