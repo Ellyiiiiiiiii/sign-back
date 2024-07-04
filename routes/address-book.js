@@ -81,6 +81,7 @@ const getListData = async (req) => {
   };
 };
 
+/*
 // router top-level middleware
 // 模擬網速不穩定狀況
 router.use((req, res, next) => {
@@ -89,7 +90,7 @@ router.use((req, res, next) => {
     next();
   }, ms);
 });
-
+*/
 // router top-level middleware
 router.use((req, res, next) => {
   if (req.session.admin) {
