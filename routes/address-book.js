@@ -248,4 +248,24 @@ router.put("/edit/:sid", upload.none(), async (req, res) => {
 
   res.json(output);
 });
+
+// 取得單筆資料的 api
+router.get("/:sid", async (req, res) => {
+  let sid = +req.params.sid || 0;
+  if (!sid) {
+    return res.json({success: false, code: 401});
+  }
+  const sql = `SELECT * FROM address_book WHERE sid=${sid}`;
+  const [rows] = await db.query(sql);
+  if (rows.length === 0) {
+    // 沒有該筆資料時,
+    return res.json({success: false, code: 402});
+  }
+  const row = rows[0];
+  if (row.birthday) {
+    // 日期格式轉換
+    row.birthday = moment(row.birthday).format(dateFormat);
+  }
+  res.json({success: true, data: row});
+});
 export default router;
