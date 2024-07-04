@@ -82,7 +82,15 @@ const getListData = async (req) => {
 };
 
 // router top-level middleware
+// 模擬網速不穩定狀況
+router.use((req, res, next) => {
+  const ms = 200 + Math.floor(Math.random() * 2000);
+  setTimeout(() => {
+    next();
+  }, ms);
+});
 
+// router top-level middleware
 router.use((req, res, next) => {
   if (req.session.admin) {
     // 如果有登入就讓他通過
@@ -92,7 +100,7 @@ router.use((req, res, next) => {
   // 可通過的白名單
   if (["/", "/api"].includes(path)) {
     return next();
-  } 
+  }
   // res.status(403).send("<h1>無權訪問此頁面</h1>"); // 直接擋掉
   res.redirect(`/login?u=${req.originalUrl}`); // 導到登入頁
 });
