@@ -27,23 +27,23 @@ const getListData = async (req) => {
     // where += ` AND \`name\` LIKE ${db.escape("%" + keyword + "%")} `;
     where += ` AND 
     (
-      \`name\` LIKE ${db.escape(`%${keyword}%`)} 
+      ab.name LIKE ${db.escape(`%${keyword}%`)} 
       OR
-      \`mobile\` LIKE ${db.escape(`%${keyword}%`)} 
+      ab.mobile LIKE ${db.escape(`%${keyword}%`)} 
     )
     `;
   }
 
   birthBegin = moment(birthBegin);
   if (birthBegin.isValid()) {
-    where += ` AND birthday >= '${birthBegin.format(dateFormat)}' `;
+    where += ` AND ab.birthday >= '${birthBegin.format(dateFormat)}' `;
   }
   birthEnd = moment(birthEnd);
   if (birthEnd.isValid()) {
-    where += ` AND birthday <= '${birthEnd.format(dateFormat)}' `;
+    where += ` AND ab.birthday <= '${birthEnd.format(dateFormat)}' `;
   }
 
-  const sql = `SELECT COUNT(*) totalRows FROM address_book ${where}`;
+  const sql = `SELECT COUNT(*) totalRows FROM address_book ab ${where}`;
   const [[{ totalRows }]] = await db.query(sql); // 取得總筆數
 
   let totalPages = 0; // 總頁數, 預設值設定 0
@@ -57,10 +57,23 @@ const getListData = async (req) => {
         info: "page 值太大",
       };
     }
-
+    /*
     const sql2 = `SELECT * FROM address_book ${where} ORDER BY sid DESC LIMIT ${
       (page - 1) * perPage
     }, ${perPage} `;
+*/
+
+    const member_sid = req.my_jwt?.id ? req.my_jwt?.id : 0;
+    const sql2 = `SELECT ab.*, li.sid like_sid
+                FROM address_book ab
+                LEFT JOIN (
+                  SELECT * FROM ab_likes WHERE member_sid=${member_sid}
+                ) li ON ab.sid=li.ab_sid
+                ${where}
+                ORDER BY ab.sid DESC
+                LIMIT ${(page - 1) * perPage}, ${perPage} `;
+    // console.log(req.my_jwt);
+    // console.log(sql2);
     [rows] = await db.query(sql2);
 
     rows.forEach((r) => {
