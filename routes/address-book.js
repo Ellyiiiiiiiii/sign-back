@@ -280,6 +280,7 @@ router.get("/fav/:ab_sid", async (req, res) => {
   // 1. 檢查用戶的授權
   if (!req.my_jwt?.id) {
     output.error = "沒有授權";
+    output.code = 402;
     return res.status(403).json(output);
   }
   // 2. 有沒有這個項目的資料
@@ -287,9 +288,25 @@ router.get("/fav/:ab_sid", async (req, res) => {
   const [rows] = await db.query(sql, [req.params.ab_sid]);
   if (rows.length < 1) {
     output.error = "沒有這個項目";
+    output.code = 405;
     return res.status(403).json(output);
   }
-  output.code = 201;
+  // 3. 該項有沒有加入過
+  const sql2 = `SELECT sid FROM ab_likes WHERE member_sid=? AND ab_sid=?`;
+  const [rows2] = await db.query(sql2, [req.my_jwt.id, req.params.ab_sid]);
+  let result;
+  if (rows2.length < 1) {
+    // 沒有加入過
+    output.action = "add";
+    const sql3 = `INSERT INTO ab_likes (member_sid, ab_sid) VALUES (?, ?)`;
+    [result] = await db.query(sql3, [req.my_jwt.id, req.params.ab_sid]);
+  } else {
+    // 已經加入了
+    output.action = "remove";
+    const sql4 = `DELETE FROM ab_likes WHERE sid=?`;
+    [result] = await db.query(sql4, [rows2[0].sid]);
+  }
+  output.success = !!result.affectedRows;
   res.json(output);
 });
 export default router;
