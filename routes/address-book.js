@@ -253,19 +253,43 @@ router.put("/edit/:sid", upload.none(), async (req, res) => {
 router.get("/:sid", async (req, res) => {
   let sid = +req.params.sid || 0;
   if (!sid) {
-    return res.json({success: false, code: 401});
+    return res.json({ success: false, code: 401 });
   }
   const sql = `SELECT * FROM address_book WHERE sid=${sid}`;
   const [rows] = await db.query(sql);
   if (rows.length === 0) {
     // 沒有該筆資料時,
-    return res.json({success: false, code: 402});
+    return res.json({ success: false, code: 402 });
   }
   const row = rows[0];
   if (row.birthday) {
     // 日期格式轉換
     row.birthday = moment(row.birthday).format(dateFormat);
   }
-  res.json({success: true, data: row});
+  res.json({ success: true, data: row });
+});
+
+// 加入或解除好友, toggle 功能
+router.get("/fav/:ab_sid", async (req, res) => {
+  const output = {
+    success: false,
+    action: "", // add, remove
+    error: "",
+    code: 0,
+  };
+  // 1. 檢查用戶的授權
+  if (!req.my_jwt?.id) {
+    output.error = "沒有授權";
+    return res.status(403).json(output);
+  }
+  // 2. 有沒有這個項目的資料
+  const sql = `SELECT * FROM address_book WHERE sid=?`;
+  const [rows] = await db.query(sql, [req.params.ab_sid]);
+  if (rows.length < 1) {
+    output.error = "沒有這個項目";
+    return res.status(403).json(output);
+  }
+  output.code = 201;
+  res.json(output);
 });
 export default router;
