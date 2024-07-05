@@ -55,6 +55,17 @@ app.use((req, res, next) => {
   res.locals.session = req.session; // 是讓 template 可以使用(讀取) session
   res.locals.title = "小新的網站"; // 預設的頁面 title
   res.locals.pageName = "";
+
+  // 解析 JWT token
+  const auth = req.get("Authorization"); // 取得用戶端送過來的 Authorization 檔頭
+  if (auth && auth.indexOf("Bearer ") === 0) {
+    const token = auth.slice(7); // 只取得 token 的部份
+    try {
+      // 解密 token 並把資料掛在 req.my_jwt
+      req.my_jwt = jwt.verify(token, process.env.JWT_KEY);
+    } catch (ex) {}
+  }
+
   next();
 });
 
@@ -320,6 +331,10 @@ app.get("/jwt2", async (req, res) => {
   const payload = jwt.verify(token, process.env.JWT_KEY); // 解密
 
   res.json(payload);
+});
+// 測試用戶端送過來的 JWT token
+app.get("/jwt-data", (req, res) => {
+  res.json(req.my_jwt);
 });
 
 // ************* 設定靜態內容資料夾 *************
