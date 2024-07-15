@@ -12,9 +12,12 @@ import upload from "./utils/upload-imgs.js";
 import admin2Router from "./routes/admin2.js";
 import abRouter from "./routes/address-book.js";
 import cart2Router from "./routes/cart2.js";
+import addRouter from "./routes/signup.js";
 import session from "express-session";
 import mysql_session from "express-mysql-session";
 import moment from "moment-timezone";
+// 資料庫使用
+// import { Op } from 'sequelize'
 import jwt from "jsonwebtoken";
 
 import db from "./utils/connect-mysql.js";
@@ -141,6 +144,7 @@ app.get(/^\/m\/09\d{2}-?\d{3}-?\d{3}$/i, (req, res) => {
 app.use("/admins", admin2Router);
 app.use("/address-book", abRouter);
 app.use("/cart2", cart2Router);
+app.use("/signup", addRouter);
 
 app.get("/try-sess", (req, res) => {
   // req.session.my_num = req.session.my_num || 0;
@@ -239,6 +243,7 @@ app.post("/login", async (req, res) => {
 
   res.json(output);
 });
+// jwt 登入功能 的登出在前端做
 app.post("/login-jwt", async (req, res) => {
   const output = {
     success: false,
@@ -288,6 +293,59 @@ app.post("/login-jwt", async (req, res) => {
 
   res.json(output);
 });
+
+// My jwt 登入功能
+app.post("/login-jwt1", async (req, res) => {
+  const output = {
+    success: false,
+    code: 0,
+    data: {
+      id: 0,
+      name: "",
+      email: "",
+      token: "",
+    },
+  };
+
+  // 取得登入的兩個欄位資料
+  let { email, password } = req.body || {};
+
+  if (!email || !password) {
+    output.code = 400;
+    return res.json(output);
+  }
+
+  const sql = "SELECT * FROM users WHERE email=?";
+  const [rows] = await db.query(sql, [email]);
+
+  if (!rows.length) {
+    output.code = 410; // 帳號是錯的
+    return res.json(output);
+  }
+  const row = rows[0];
+  const result = await bcrypt.compare(password, row.password);
+  if (result) {
+    output.success = true;
+    output.code = 200;
+
+    const token = jwt.sign(
+      { id: row.id, email: row.email },
+      process.env.JWT_KEY
+    );
+    output.data = {
+      id: row.id,
+      name: row.name,
+      email: row.email,
+      token,
+    };
+  } else {
+    output.code = 430; // 密碼是錯的
+  }
+
+  res.json(output);
+});
+// test token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZW1haWwiOiJtYWlsMjk5MTlAdGVzdC5jb20iLCJpYXQiOjE3MjA5MzczMzl9.WtI50hSSOe-AAOR0iO23JIgu40kBUFA9lJyhwfTw7PQ
+
 // 登出
 app.get("/logout", async (req, res) => {
   delete req.session.admin;
